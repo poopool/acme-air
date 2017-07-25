@@ -79,44 +79,26 @@ echo
 echo "Stack Artifact ID: ${APL_STACK_ARTIFACT_ID}"
 
 if [ ! -z "$TRAVIS_TAG" ]; then
-cat >release.yaml <<EOL
-meta_data:
-    display_name: ${APL_ARTIFACT_NAME}
-stack_id: ${APL_STACK_ID}
-stack_version_id: ${APL_STACK_VERSION_ID}
-components:
-  - name: node-svc
-    stack_component_id: ${APL_STACK_COMPONENT_ID}
-    services:
-    - name: node-service
-      release:
-        artifacts:
-          builder:
-            stack_artifact_id: 2f9b4607-1034-446c-817e-ce59b56cc631
-          code:
-            stack_artifact_id: ${APL_STACK_ARTIFACT_ID}
-          image:
-            stack_artifact_id: 7f0b2e90-8757-47ed-bb70-c5c091a0b681
-  - name: mongo
-    stack_component_id: 81b38498-bd49-4b5b-9f51-5bdb2bd9f049
-    services:
-    - name: mongo-service
-      release:
-        artifacts:
-          image:
-            stack_artifact_id: 5549dddb-a0a5-4453-8154-4b126b0a7d0d
-EOL
 
-#    APL_RELEASE_CREATE_RESULT_JSON=$(./apl releases create \
-#        --name ${APL_ARTIFACT_NAME} \
-#        --stack-id ${APL_STACK_ID} \
-#        --stack-version-id ${APL_STACK_VERSION_ID} \
-#        --service-name node-service \
-#        --stack-artifact-id ${APL_STACK_ARTIFACT_ID} \
-#        --stack-component-id ${APL_STACK_COMPONENT_ID} \
-#        -o json)
+    # Each component needs to be packaged as key/value pairs for the --component flag
+    mongo_component=(StackComponentID=81b38498-bd49-4b5b-9f51-5bdb2bd9f049)
+    mongo_component+=(ServiceName=mongo-service)
+    mongo_component+=(StackArtifactID=5549dddb-a0a5-4453-8154-4b126b0a7d0d)
+    mongo_component=$(IFS=, ; echo "${mongo_component[*]}")
 
-    APL_RELEASE_CREATE_RESULT_JSON=$(./apl releases create -f release.yaml -o json)
+    node_component=(StackComponentID=${APL_STACK_COMPONENT_ID})
+    node_component+=(ServiceName=node-service)
+    node_component+=(StackArtifactID=${APL_STACK_ARTIFACT_ID})
+    node_component+=(StackArtifactID=7f0b2e90-8757-47ed-bb70-c5c091a0b681)
+    node_component+=(StackArtifactID=2f9b4607-1034-446c-817e-ce59b56cc631)
+    node_component=$(IFS=, ; echo "${node_component[*]}")
+
+    APL_RELEASE_CREATE_RESULT_JSON=$(./apl releases create -o json \
+        --name ${APL_ARTIFACT_NAME} \
+        --stack-id ${APL_STACK_ID} \
+        --stack-version-id ${APL_STACK_VERSION_ID} \
+        --component "${mongo_component}" \
+        --component "${node_component}")
 
     echo
     echo "Result: ${APL_RELEASE_CREATE_RESULT_JSON}"
@@ -128,22 +110,26 @@ EOL
 
     APL_RELEASE_ID=$(echo $APL_RELEASE_CREATE_RESULT_JSON | jq -r '.data')
     echo "Release ID: ${APL_RELEASE_ID}"
+
+    exit 1
 fi
 
 echo
 echo "Submitting deployment:"
 
+#
 # deploy it
-APL_DEPLOY_CREATE_RESULT_JSON=$(./apl deployments create \
+    node_component=(StackComponentID=${APL_STACK_COMPONENT_ID})
+    node_component+=(ServiceName=node-service)
+    node_component+=(StackArtifactID=${APL_STACK_ARTIFACT_ID})
+    node_component=$(IFS=, ; echo "${node_component[*]}")
+
+APL_DEPLOY_CREATE_RESULT_JSON=$(./apl deployments create -o json \
     --loc-deploy-id ${APL_LOC_DEPLOY_ID} \
     --name ${APL_ARTIFACT_NAME} \
     --workload-type ${WORKLOAD_TYPE} \
     --release-id ${APL_RELEASE_ID} \
-    --stack-component-id ${APL_STACK_COMPONENT_ID} \
-    --component-service-id ct-deployment \
-    --service-name  node-service \
-    --stack-artifact-id ${APL_STACK_ARTIFACT_ID} \
-    -o json)
+    --component "${node_component}")
 
 echo
 echo "Result: ${APL_DEPLOY_CREATE_RESULT_JSON}"
