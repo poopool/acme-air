@@ -11,4 +11,4 @@ env:
   - APL_STACK_COMPONENT_ID: "af62e9d4-2ad1-40d8-aae3-348ad0678c8e"
   - APL_COMPONENT_SERVICE_ID: "ct-deployment"
   - APL_ARTIFACT_NAME: "acme-air"
-  - APL_CMD_RELEASE: "v0.1.19"
+  - APL_CMD_RELEASE: "v0.2.0"
