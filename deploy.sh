@@ -60,7 +60,7 @@ APL_SA_CREATE_RESULT_JSON=$(./apl stack-artifacts create \
     --loc-artifact-id ${APL_LOC_ARTIFACT_ID} \
     --stack-id ${APL_STACK_ID} \
     --stack-artifact-type code \
-    --artifact-name https://github.com/applariat/acme-air/archive/${CODE_LOC}.zip \
+    --artifact-name https://github.com/poopool/acme-air/archive/${CODE_LOC}.zip \
     --name ${APL_ARTIFACT_NAME} \
     -o json)
 
