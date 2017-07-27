@@ -3,12 +3,12 @@ script:
   - bash ./deploy.sh
 env:
   global:
-  - APL_LOC_DEPLOY_ID: "8ee404f4-9d01-4d82-8dc7-dcf8a99e2fc0"
-  - APL_LOC_ARTIFACT_ID: "dd8d371b-e713-4388-897e-58df81f01a95"
-  - APL_STACK_ID: "2e04b11a-c6f7-4693-9c16-c83843d8ef8a"
-  - APL_RELEASE_ID: "711951cd-d783-4536-a445-8edf80960b3d"
-  - APL_STACK_VERSION_ID: "41d5855d-8ffa-4c12-8e6d-029caca2b487"
-  - APL_STACK_COMPONENT_ID: "af62e9d4-2ad1-40d8-aae3-348ad0678c8e"
+  - APL_LOC_DEPLOY_ID: "bc59a6f2-190f-496e-9e67-448e694ff153"
+  - APL_LOC_ARTIFACT_ID: "c06b9a23-dd02-4e36-b3b7-edfab61c370a"
+  - APL_STACK_ID: "c2ade82c-1c68-4dd9-89f0-a02716ab65ff"
+  - APL_RELEASE_ID: "e882ba00-ffc8-4793-aa5a-0a810811bb5a"
+  - APL_STACK_VERSION_ID: "e3b086e9-0be8-40ee-9f1c-0e24fd7ec9e1"
+  - APL_STACK_COMPONENT_ID: "028f06cf-76eb-463a-b751-b9cf08444ddf"
   - APL_COMPONENT_SERVICE_ID: "ct-deployment"
   - APL_ARTIFACT_NAME: "acme-air"
   - APL_CMD_RELEASE: "v0.2.0"
