@@ -8,7 +8,7 @@ branches:
 script:
   - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./apl-override.sh; fi
   - if [[ "$TRAVIS_BRANCH" =~ ^release- ]]; then ./apl-deploy.sh; fi
-  - if if [[ "$TRAVIS_BRANCH" =~ ^rc- ]]; then ./deploy.sh; fi
+#  - if if [[ "$TRAVIS_BRANCH" =~ ^rc- ]]; then ./deploy.sh; fi
 env:
   global:
   - APL_LOC_DEPLOY_ID: "bc59a6f2-190f-496e-9e67-448e694ff153"

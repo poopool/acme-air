@@ -19,9 +19,9 @@ echo "APL_API: $APL_API"
 echo
 echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
 
-APL_ARTIFACT_NAME="staging-${TRAVIS_TAG}"
-CODE_LOC=${TRAVIS_TAG}
-WORKLOAD_TYPE=level5
+APL_ARTIFACT_NAME="qa-${TRAVIS_COMMIT}"
+CODE_LOC=${TRAVIS_COMMIT}
+WORKLOAD_TYPE=level2
 
 ## Make the name domain safe. // TODO: The API should handle this
 APL_ARTIFACT_NAME=${APL_ARTIFACT_NAME//[^A-Za-z0-9\\-]/-}
