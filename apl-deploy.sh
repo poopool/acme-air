@@ -17,24 +17,21 @@ echo "APL_API: $APL_API"
 echo
 echo "TRAVIS_BRANCH: $TRAVIS_BRANCH"
 
+#if building a tag, make a new release and deploy, if not only doing a deployment
+#if [ ! -z "$TRAVIS_TAG" ]; then
+#    APL_ARTIFACT_NAME="staging-${TRAVIS_TAG}"
+#    CODE_LOC=${TRAVIS_TAG}
+#    WORKLOAD_TYPE=level5
+#else
+#    TRAVIS_COMMIT=`echo $TRAVIS_COMMIT |cut -c 1-12`
+#    APL_ARTIFACT_NAME="qa-${TRAVIS_COMMIT}"
+#    CODE_LOC=${TRAVIS_COMMIT}
+#    WORKLOAD_TYPE=level2
+#fi
 
-if [ "$TRAVIS_BRANCH" = "Jira-700"  ]
-then
-    echo "Exiting, not building for Jira-700"
-    exit 0
-fi
-
-
-if [ ! -z "$TRAVIS_TAG" ]; then
-    APL_ARTIFACT_NAME="staging-${TRAVIS_TAG}"
-    CODE_LOC=${TRAVIS_TAG}
-    WORKLOAD_TYPE=level5
-else
-    TRAVIS_COMMIT=`echo $TRAVIS_COMMIT |cut -c 1-12`
-    APL_ARTIFACT_NAME="qa-${TRAVIS_COMMIT}"
-    CODE_LOC=${TRAVIS_COMMIT}
-    WORKLOAD_TYPE=level2
-fi
+APL_ARTIFACT_NAME="staging-${TRAVIS_TAG}"
+CODE_LOC=${TRAVIS_TAG}
+WORKLOAD_TYPE=level5
 
 #APL_ARTIFACT_NAME="${APL_ARTIFACT_NAME}-${TRAVIS_BUILD_NUMBER}"
 #APL_ARTIFACT_NAME="${APL_ARTIFACT_NAME}-${TRAVIS_TAG}"
@@ -44,6 +41,9 @@ fi
 ## Make the name domain safe. // TODO: The API should handle this
 APL_ARTIFACT_NAME=${APL_ARTIFACT_NAME//[^A-Za-z0-9\\-]/-}
 
+
+
+## Downloading and installing apl cli
 APL_FILE=apl-${APL_CMD_RELEASE}-linux_amd64.tgz
 if [[ "$OSTYPE" == "darwin"* ]]; then
     APL_FILE=apl-${APL_CMD_RELEASE}-darwin_amd64.tgz
@@ -56,6 +56,8 @@ tar zxf ${APL_FILE}
 echo
 echo "Submitting stack artifact file:"
 
+
+
 APL_SA_CREATE_RESULT_JSON=$(./apl stack-artifacts create \
     --loc-artifact-id ${APL_LOC_ARTIFACT_ID} \
     --stack-id ${APL_STACK_ID} \
@@ -63,6 +65,7 @@ APL_SA_CREATE_RESULT_JSON=$(./apl stack-artifacts create \
     --artifact-name https://github.com/poopool/acme-air/archive/${CODE_LOC}.zip \
     --name ${APL_ARTIFACT_NAME} \
     -o json)
+
 
 echo
 echo "Result: ${APL_SA_CREATE_RESULT_JSON}"

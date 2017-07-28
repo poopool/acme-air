@@ -1,6 +1,14 @@
 language: generic # don't install any environment
+# safelist develop branch and tags(release-* and rc-*)
+branches:
+  only:
+  - develop
+  - /^release-.*$/
+  - /^rc-.*$/
 script:
-  - bash ./deploy.sh
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./apl-overwrite.sh; fi
+  - if [[ "$TRAVIS_BRANCH" =~ ^release- ]]; then ./apl-deploy.sh; fi
+  - if if [[ "$TRAVIS_BRANCH" =~ ^rc- ]]; then ./deploy.sh; fi
 env:
   global:
   - APL_LOC_DEPLOY_ID: "bc59a6f2-190f-496e-9e67-448e694ff153"
@@ -9,6 +17,7 @@ env:
   - APL_RELEASE_ID: "e882ba00-ffc8-4793-aa5a-0a810811bb5a"
   - APL_STACK_VERSION_ID: "e3b086e9-0be8-40ee-9f1c-0e24fd7ec9e1"
   - APL_STACK_COMPONENT_ID: "028f06cf-76eb-463a-b751-b9cf08444ddf"
+  - APL_DEPLOYMENT_ID: "eedcebb1-c14c-4362-9fe8-e46eb5849ed0"
   - APL_COMPONENT_SERVICE_ID: "ct-deployment"
   - APL_ARTIFACT_NAME: "acme-air"
   - APL_CMD_RELEASE: "v0.2.0"
