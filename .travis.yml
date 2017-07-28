@@ -6,7 +6,7 @@ branches:
   - /^release-.*$/
   - /^rc-.*$/
 script:
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./apl-overwrite.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then ./apl-override.sh; fi
   - if [[ "$TRAVIS_BRANCH" =~ ^release- ]]; then ./apl-deploy.sh; fi
   - if if [[ "$TRAVIS_BRANCH" =~ ^rc- ]]; then ./deploy.sh; fi
 env:
